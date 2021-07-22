@@ -143,6 +143,14 @@ public class VendingMachineCLI {
 			}
 		}
 	}
+	public void finishTransaction () {
+		double quarterAmount;
+		double dimeAmount;
+		double nickelAmount;
+
+
+
+	}
 
 
 
