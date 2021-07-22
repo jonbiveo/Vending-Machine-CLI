@@ -15,7 +15,8 @@ public class VendingMachineCLI {
 
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
-	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE };
+	private static final String MAIN_MENU_OPTION_EXIT = "Exit";
+	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT};
 
 	private static final String [] EDIT_DATA_OPTIONS = {"Feed Money", "Select Product", "Finish Transaction", "Back"};
 
@@ -38,8 +39,9 @@ public class VendingMachineCLI {
 			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
 				displayLoadData();
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
-				// do purchase
 				displayPurchaseMenuOptions();
+			} else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
+				System.exit(1);
 			}
 		}
 	}
@@ -59,7 +61,7 @@ public class VendingMachineCLI {
 				double price = Double.parseDouble(lineArr[2]);
 				String category = lineArr[3];
 
-				Product product = new Product(slotLocation, name, price, category);
+				Product product = new Product(slotLocation, name, price, category, 5);
 				products.add(product);
 			}
 		} catch (FileNotFoundException e) {
@@ -68,7 +70,8 @@ public class VendingMachineCLI {
 	}
 	public void displayLoadData() {
 		 for (Product product : this.products) {
-			 System.out.println(product.getSlotLocation() + " " + product.getName() + " " + product.getPrice() + " " + product.getCategory() );
+			 System.out.println(product.getSlotLocation() + " " + product.getName() + " " +
+					 product.getPrice() + " " + product.getCategory() + " Quantity: " + product.getQuantity());
 		 }
 	}
 	public void displayPurchaseMenuOptions() {
@@ -79,13 +82,13 @@ public class VendingMachineCLI {
 			if (choice.equals("Feed Money")) {
 				feedMoney();
 			} else if (choice.equals("Select Product")) {
-
+				selectProduct();
 			} else if (choice.equals("Finish Transaction")) {
 
 			} else if (choice.equals("Back")) {
 				stay = false;
 			}
-			System.out.println("Current money provided: $" + balance);
+			System.out.println("Current balance: $" + balance);
 		}
 	}
 	public void feedMoney () {
@@ -106,6 +109,39 @@ public class VendingMachineCLI {
 				System.out.println("Not a valid dollar amount");
 	}
 
+	}
+
+	public void selectProduct() {
+		displayLoadData();
+		System.out.println("");
+		System.out.println("Please enter an item code to select an item.");
+		Scanner inputSelection = new Scanner(System.in);
+		String slotLocationInput = inputSelection.nextLine();
+		boolean found = false;
+
+		for (int i = 0; i < this.products.size(); i++) {
+			Product product = products.get(i);
+			String slotLocation = product.getSlotLocation();
+
+			if (slotLocation.equals(slotLocationInput)) {
+				if (balance >= product.getPrice()) {
+					if (product.getQuantity() > 0) {
+						found = true;
+						product.setQuantity(product.getQuantity() - 1);
+						balance -= product.getPrice();
+						if (product.getCategory().equals("Drink")) {
+							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Glug Glug, Yum!");
+						} else if (product.getCategory().equals("Candy")) {
+							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Munch Munch, Yum!");
+						} else if (product.getCategory().equals("Chips")) {
+							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Crunch Crunch, Yum!");
+						} else if (product.getCategory().equals("Gum")) {
+							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Chew Chew, Yum!");
+						}
+					}
+				}
+			}
+		}
 	}
 
 
