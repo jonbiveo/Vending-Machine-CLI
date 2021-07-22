@@ -14,6 +14,8 @@ public class VendingMachineCLI {
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE };
 
+	private static final String [] EDIT_DATA_OPTIONS = {"Feed Money", "Select Product", "Finish Transaction", "Back"};
+
 	private Menu menu;
 	private List<Product> products = new ArrayList<>();
 
@@ -29,7 +31,7 @@ public class VendingMachineCLI {
 			String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 
 			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
-				loadData();
+				displayLoadData();
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
 				// do purchase
 			}
@@ -56,6 +58,27 @@ public class VendingMachineCLI {
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("Problem finding file.");
+		}
+	}
+	public void displayLoadData() {
+		 for (Product product : this.products) {
+			 System.out.println(product.getSlotLocation() + " " + product.getName() + " " + product.getPrice() + " " + product.getCategory() );
+		 }
+	}
+	public void displayPurchaseMenuOptions() {
+		boolean stay = true;
+
+		while (stay) {
+			String choice = (String) menu.getChoiceFromOptions(EDIT_DATA_OPTIONS);
+			if (choice.equals("Feed Money")) {
+
+			} else if (choice.equals("Select Product")) {
+
+			} else if (choice.equals("Finish Transaction")) {
+
+			} else if (choice.equals("Back")) {
+				stay = false;
+			}
 		}
 	}
 

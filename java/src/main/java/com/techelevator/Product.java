@@ -7,11 +7,13 @@ public class Product {
     private double price;
     private String category;
 
+
     public Product(String slotLocation, String name, double price, String category) {
         this.slotLocation = slotLocation;
         this.name = name;
         this.price = price;
         this.category = category;
+
     }
 
     public String getSlotLocation() {
@@ -29,4 +31,7 @@ public class Product {
     public String getCategory() {
         return category;
     }
-}
+
+
+    }
+
