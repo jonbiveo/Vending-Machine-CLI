@@ -1,9 +1,12 @@
 package com.techelevator;
 
 import com.techelevator.view.Menu;
+import org.w3c.dom.ls.LSOutput;
 
+import javax.crypto.spec.PSource;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -18,6 +21,8 @@ public class VendingMachineCLI {
 
 	private Menu menu;
 	private List<Product> products = new ArrayList<>();
+
+	private double balance = 0.00;
 
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
@@ -34,6 +39,7 @@ public class VendingMachineCLI {
 				displayLoadData();
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
 				// do purchase
+				displayPurchaseMenuOptions();
 			}
 		}
 	}
@@ -71,7 +77,7 @@ public class VendingMachineCLI {
 		while (stay) {
 			String choice = (String) menu.getChoiceFromOptions(EDIT_DATA_OPTIONS);
 			if (choice.equals("Feed Money")) {
-
+				feedMoney();
 			} else if (choice.equals("Select Product")) {
 
 			} else if (choice.equals("Finish Transaction")) {
@@ -79,7 +85,27 @@ public class VendingMachineCLI {
 			} else if (choice.equals("Back")) {
 				stay = false;
 			}
+			System.out.println("Current money provided: $" + balance);
 		}
+	}
+	public void feedMoney () {
+		Scanner feedMoneyScanner = new Scanner(System.in);
+		System.out.println("Please enter dollars in 1, 2, 5, or 10");
+
+			int dollarAmount = Integer.parseInt(feedMoneyScanner.nextLine());
+
+			if (dollarAmount == 1) {
+				balance += 1;
+			} else if (dollarAmount == 2) {
+				balance += 2;
+			} else if (dollarAmount == 5) {
+				balance += 5;
+			} else if (dollarAmount == 10) {
+				balance += 10;
+			} else {
+				System.out.println("Not a valid dollar amount");
+	}
+
 	}
 
 

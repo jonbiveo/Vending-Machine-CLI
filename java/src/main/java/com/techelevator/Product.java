@@ -6,13 +6,23 @@ public class Product {
     private String name;
     private double price;
     private String category;
+    private int quantity;
 
 
-    public Product(String slotLocation, String name, double price, String category) {
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Product(String slotLocation, String name, double price, String category, int quantity) {
         this.slotLocation = slotLocation;
         this.name = name;
         this.price = price;
         this.category = category;
+        this.quantity = quantity;
 
     }
 
