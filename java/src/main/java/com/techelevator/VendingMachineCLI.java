@@ -7,6 +7,7 @@ import javax.crypto.spec.PSource;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -23,7 +24,7 @@ public class VendingMachineCLI {
 	private Menu menu;
 	private List<Product> products = new ArrayList<>();
 
-	private double balance = 0.00;
+	private BigDecimal balance = new BigDecimal(0);
 
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
@@ -58,7 +59,7 @@ public class VendingMachineCLI {
 
 				String slotLocation = lineArr[0];
 				String name = lineArr[1];
-				double price = Double.parseDouble(lineArr[2]);
+				BigDecimal price = new BigDecimal(lineArr[2]);
 				String category = lineArr[3];
 
 				Product product = new Product(slotLocation, name, price, category, 5);
@@ -92,19 +93,24 @@ public class VendingMachineCLI {
 		}
 	}
 	public void feedMoney () {
+		BigDecimal bigDecimalOne = new BigDecimal("1.00");
+		BigDecimal bigDecimalTwo = new BigDecimal("2.00");
+		BigDecimal bigDecimalFive = new BigDecimal("5.00");
+		BigDecimal bigDecimalTen = new BigDecimal("10.00");
+
 		Scanner feedMoneyScanner = new Scanner(System.in);
 		System.out.println("Please enter dollars in 1, 2, 5, or 10");
 
 			int dollarAmount = Integer.parseInt(feedMoneyScanner.nextLine());
 
 			if (dollarAmount == 1) {
-				balance += 1;
+				balance = balance.add(bigDecimalOne);
 			} else if (dollarAmount == 2) {
-				balance += 2;
+				balance = balance.add(bigDecimalTwo);
 			} else if (dollarAmount == 5) {
-				balance += 5;
+				balance = balance.add(bigDecimalFive);
 			} else if (dollarAmount == 10) {
-				balance += 10;
+				balance = balance.add(bigDecimalTen);
 			} else {
 				System.out.println("Not a valid dollar amount");
 	}
@@ -118,17 +124,23 @@ public class VendingMachineCLI {
 		Scanner inputSelection = new Scanner(System.in);
 		String slotLocationInput = inputSelection.nextLine();
 		boolean found = false;
+		boolean enoughBalance = false;
+		boolean enoughQuantity = false;
 
 		for (int i = 0; i < this.products.size(); i++) {
 			Product product = products.get(i);
 			String slotLocation = product.getSlotLocation();
+		BigDecimal productPriceDecimal = new BigDecimal(String.valueOf(product.getPrice()));
+
 
 			if (slotLocation.equals(slotLocationInput)) {
-				if (balance >= product.getPrice()) {
+				found = true;
+				if (balance.compareTo(productPriceDecimal) >= 0) {
+					enoughBalance = true;
 					if (product.getQuantity() > 0) {
-						found = true;
+						enoughQuantity = true;
 						product.setQuantity(product.getQuantity() - 1);
-						balance -= product.getPrice();
+						balance = balance.subtract(product.getPrice());
 						if (product.getCategory().equals("Drink")) {
 							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Glug Glug, Yum!");
 						} else if (product.getCategory().equals("Candy")) {
@@ -138,9 +150,19 @@ public class VendingMachineCLI {
 						} else if (product.getCategory().equals("Gum")) {
 							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Chew Chew, Yum!");
 						}
+					} else {
+						System.out.println("Item is sold out.");
 					}
+				} else {
+					System.out.println("Balance too low.");
 				}
 			}
+
+		}if(found) {
+			System.out.println("Dispensing item");
+			
+		} else {
+			System.out.println("Invalid code.");
 		}
 	}
 	public void finishTransaction () {
