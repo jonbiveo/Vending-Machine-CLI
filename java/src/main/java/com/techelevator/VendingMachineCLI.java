@@ -111,18 +111,18 @@ public class VendingMachineCLI {
 
 			if (dollarAmount == 1) {
 				balance = balance.add(bigDecimalOne);
-				logWriter.writeToFile(currentDateTime.format(targetFormat) + "FEED MONEY: \\$1.00" + balance);
+				logWriter.writeToFile(currentDateTime.format(targetFormat) + " FEED MONEY: \\$1.00 \\$" + balance);
 			} else if (dollarAmount == 2) {
 				balance = balance.add(bigDecimalTwo);
-				logWriter.writeToFile(currentDateTime.format(targetFormat) + "FEED MONEY: \\$2.00" + balance);
+				logWriter.writeToFile(currentDateTime.format(targetFormat) + " FEED MONEY: \\$2.00 \\$" + balance);
 
 			} else if (dollarAmount == 5) {
 				balance = balance.add(bigDecimalFive);
-				logWriter.writeToFile(currentDateTime.format(targetFormat) + "FEED MONEY: \\$5.00" + balance);
+				logWriter.writeToFile(currentDateTime.format(targetFormat) + " FEED MONEY: \\$5.00 \\$" + balance);
 
 			} else if (dollarAmount == 10) {
 				balance = balance.add(bigDecimalTen);
-				logWriter.writeToFile(currentDateTime.format(targetFormat) + "FEED MONEY: \\$10.00" + balance);
+				logWriter.writeToFile(currentDateTime.format(targetFormat) + " FEED MONEY: \\$10.00 \\$" + balance);
 
 			} else {
 				System.out.println("Not a valid dollar amount");
@@ -139,6 +139,7 @@ public class VendingMachineCLI {
 		boolean found = false;
 		boolean enoughBalance = false;
 		boolean enoughQuantity = false;
+		BigDecimal originalBalance = new BigDecimal(String.valueOf(balance));
 
 		for (int i = 0; i < this.products.size(); i++) {
 			Product product = products.get(i);
@@ -156,12 +157,16 @@ public class VendingMachineCLI {
 						balance = balance.subtract(product.getPrice());
 						if (product.getCategory().equals("Drink")) {
 							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Glug Glug, Yum!");
+							logWriter.writeToFile(currentDateTime.format(targetFormat) + " " + product.getName() + " " + product.getSlotLocation() + " \\$" + originalBalance + " \\$" + balance );
 						} else if (product.getCategory().equals("Candy")) {
 							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Munch Munch, Yum!");
+							logWriter.writeToFile(currentDateTime.format(targetFormat) + " " + product.getName()+ " " + product.getSlotLocation() + " \\$" + originalBalance + " \\$" + balance );
 						} else if (product.getCategory().equals("Chips")) {
 							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Crunch Crunch, Yum!");
+							logWriter.writeToFile(currentDateTime.format(targetFormat) + " " + product.getName()+ " " + product.getSlotLocation() + " \\$" + originalBalance + " \\$" + balance );
 						} else if (product.getCategory().equals("Gum")) {
 							System.out.println(product.getName() + " " + product.getPrice() + " " + balance + " Chew Chew, Yum!");
+							logWriter.writeToFile(currentDateTime.format(targetFormat) + " " + product.getName()+ " " + product.getSlotLocation() + " \\$" + originalBalance + " \\$" + balance );
 						}
 					} else {
 						System.out.println("Item is sold out.");
@@ -185,6 +190,7 @@ public class VendingMachineCLI {
 		int quarterAmount;
 		int dimeAmount;
 		int nickelAmount;
+		BigDecimal originalBalance = new BigDecimal(String.valueOf(balance));
 
 		if (balance.compareTo(new BigDecimal(0))> 0) {
 
@@ -200,6 +206,7 @@ public class VendingMachineCLI {
 			balance = balance.subtract(balance);
 			System.out.println("Change is " + quarterAmount + " in quarters " + dimeAmount + " in dimes " + nickelAmount
 			+ " in nickels.");
+			logWriter.writeToFile(currentDateTime.format(targetFormat) + " GIVE CHANGE: \\$" + originalBalance + " \\$" + balance);
 
 		}else {
 			System.out.println("No balance available.");
