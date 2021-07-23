@@ -67,7 +67,24 @@ public class VendingMachineCLI {
 				BigDecimal price = new BigDecimal(lineArr[2]);
 				String category = lineArr[3];
 
-				Product product = new Product(slotLocation, name, price, category, 5);
+				// 1. Make the Product an abstract class
+				// check the value of category
+
+				// If category is "Gum"
+				// then  Product product  = new Gum(......)
+
+				// If category is "Drink"
+				// then  Product product  = new Drink(......)
+				Product product = null;
+				if (category.equals("Gum")) {
+					product = new Gum(slotLocation, name, price, category, 5);
+				} else if (category.equals("Drink")) {
+					product = new Drink(slotLocation, name, price, category, 5);
+				} else if (category.equals("Candy")) {
+					product = new Candy(slotLocation, name, price, category, 5);
+				} else if (category.equals("Chip")) {
+					product = new Chips(slotLocation, name, price, category, 5);
+				}
 				products.add(product);
 			}
 		} catch (FileNotFoundException e) {
