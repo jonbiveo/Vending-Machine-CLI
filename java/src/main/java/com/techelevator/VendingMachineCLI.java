@@ -83,7 +83,7 @@ public class VendingMachineCLI {
 				} else if (category.equals("Candy")) {
 					product = new Candy(slotLocation, name, price, category, 5);
 				} else if (category.equals("Chip")) {
-					product = new Chips(slotLocation, name, price, category, 5);
+					product = new Chip(slotLocation, name, price, category, 5);
 				}
 				products.add(product);
 			}
