@@ -159,16 +159,19 @@ public class VendingMachineCLI {
 			}
 
 		}if(found) {
-			System.out.println("Dispensing item");
-			
+			if (enoughBalance) {
+				if (enoughQuantity) {
+					System.out.println("Dispensing Item");
+				}
+			}
 		} else {
 			System.out.println("Invalid code.");
 		}
 	}
-	public void finishTransaction () {
-		double quarterAmount;
-		double dimeAmount;
-		double nickelAmount;
+	public void finishTransaction() {
+		BigDecimal quarterAmount;
+		BigDecimal dimeAmount;
+		BigDecimal nickelAmount;
 
 
 
