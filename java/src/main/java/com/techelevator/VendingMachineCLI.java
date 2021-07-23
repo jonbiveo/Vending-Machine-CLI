@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -25,6 +27,9 @@ public class VendingMachineCLI {
 	private List<Product> products = new ArrayList<>();
 
 	private BigDecimal balance = new BigDecimal(0);
+	private LogWriter logWriter = new LogWriter("Log.txt");
+	LocalDateTime currentDateTime = LocalDateTime.now();
+	DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a");
 
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
@@ -85,7 +90,8 @@ public class VendingMachineCLI {
 			} else if (choice.equals("Select Product")) {
 				selectProduct();
 			} else if (choice.equals("Finish Transaction")) {
-
+				finishTransaction();
+				stay = false;
 			} else if (choice.equals("Back")) {
 				stay = false;
 			}
@@ -105,12 +111,19 @@ public class VendingMachineCLI {
 
 			if (dollarAmount == 1) {
 				balance = balance.add(bigDecimalOne);
+				logWriter.writeToFile(currentDateTime.format(targetFormat) + "FEED MONEY: \\$1.00" + balance);
 			} else if (dollarAmount == 2) {
 				balance = balance.add(bigDecimalTwo);
+				logWriter.writeToFile(currentDateTime.format(targetFormat) + "FEED MONEY: \\$2.00" + balance);
+
 			} else if (dollarAmount == 5) {
 				balance = balance.add(bigDecimalFive);
+				logWriter.writeToFile(currentDateTime.format(targetFormat) + "FEED MONEY: \\$5.00" + balance);
+
 			} else if (dollarAmount == 10) {
 				balance = balance.add(bigDecimalTen);
+				logWriter.writeToFile(currentDateTime.format(targetFormat) + "FEED MONEY: \\$10.00" + balance);
+
 			} else {
 				System.out.println("Not a valid dollar amount");
 	}
@@ -169,13 +182,33 @@ public class VendingMachineCLI {
 		}
 	}
 	public void finishTransaction() {
-		BigDecimal quarterAmount;
-		BigDecimal dimeAmount;
-		BigDecimal nickelAmount;
+		int quarterAmount;
+		int dimeAmount;
+		int nickelAmount;
+
+		if (balance.compareTo(new BigDecimal(0))> 0) {
+
+
+			BigDecimal balanceInCents = new BigDecimal(String.valueOf(balance.multiply(new BigDecimal("100"))));
+
+			int balanceInCentsInt = balanceInCents.intValue();
+			quarterAmount = balanceInCentsInt / 25;
+			int numberOne = balanceInCentsInt % 25;
+			dimeAmount = numberOne / 10;
+			int numberTwo = numberOne % 10;
+			nickelAmount = numberTwo / 5;
+			balance = balance.subtract(balance);
+			System.out.println("Change is " + quarterAmount + " in quarters " + dimeAmount + " in dimes " + nickelAmount
+			+ " in nickels.");
+
+		}else {
+			System.out.println("No balance available.");
+		}
 
 
 
 	}
+
 
 
 
